@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # CORS (loaded from .env as comma-separated string)
-    CORS_ORIGINS= ["*"];
+    # CORS_ORIGINS= ["*"];
 
     # Database
     DATABASE_URL: str
@@ -44,6 +44,22 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
+
+
+# def get_cors_origins() -> List[str]:
+#     """
+#     Convert comma-separated env string into clean list
+#     """
+#     if not settings.CORS_ORIGINS:
+#         return []
+
+#     return [
+#         origin.strip()
+#         for origin in settings.CORS_ORIGINS.split(",")
+#         if origin.strip()
+#     ]
+
+
 
 
 def get_cors_origins() -> List[str]:
