@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # CORS (loaded from .env as comma-separated string)
-    CORS_ORIGINS: str
+    CORS_ORIGINS= ["*"];
 
     # Database
     DATABASE_URL: str
