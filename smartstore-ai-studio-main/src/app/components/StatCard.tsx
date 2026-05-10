@@ -19,7 +19,15 @@ const accentMap: Record<NonNullable<Props["accent"]>, string> = {
   success: "from-success/15 to-success/5 text-success",
 };
 
-export function StatCard({ label, value, delta, trend = "neutral", icon, accent = "primary", hint }: Props) {
+export function StatCard({
+  label,
+  value,
+  delta,
+  trend = "neutral",
+  icon,
+  accent = "primary",
+  hint,
+}: Props) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -30,7 +38,9 @@ export function StatCard({ label, value, delta, trend = "neutral", icon, accent 
       <div className="absolute inset-0 bg-gradient-to-br opacity-50 pointer-events-none" />
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            {label}
+          </span>
           <span className="text-3xl font-display font-bold tracking-tight">{value}</span>
           {(delta || hint) && (
             <div className="flex items-center gap-2 mt-1">
@@ -40,7 +50,7 @@ export function StatCard({ label, value, delta, trend = "neutral", icon, accent 
                     "text-xs font-semibold px-2 py-0.5 rounded-md",
                     trend === "up" && "text-success bg-success/10",
                     trend === "down" && "text-destructive bg-destructive/10",
-                    trend === "neutral" && "text-muted-foreground bg-muted/40"
+                    trend === "neutral" && "text-muted-foreground bg-muted/40",
                   )}
                 >
                   {delta}
@@ -53,7 +63,7 @@ export function StatCard({ label, value, delta, trend = "neutral", icon, accent 
         <div
           className={cn(
             "size-11 rounded-xl grid place-items-center bg-gradient-to-br shrink-0 ring-1 ring-inset ring-white/5",
-            accentMap[accent]
+            accentMap[accent],
           )}
         >
           {icon}

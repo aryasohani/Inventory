@@ -18,6 +18,10 @@ import type {
   StockHistoryPoint,
   POItem,
   POStatus,
+  BackendProduct,
+  BackendSupplier,
+  BackendPurchaseOrder,
+  BackendPOItem,
 } from "./types";
 
 // ── Base URL ──────────────────────────────────────────────────────────────────
@@ -56,12 +60,12 @@ apiClient.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // ── Type helpers: map backend snake_case → frontend camelCase ─────────────────
 
-function mapProduct(p: any): Product {
+function mapProduct(p: BackendProduct): Product {
   return {
     id: p.id,
     sku: p.sku,
@@ -85,7 +89,7 @@ function mapStockStatus(s: string): Product["status"] {
   return "ok";
 }
 
-function mapSupplier(s: any): Supplier {
+function mapSupplier(s: BackendSupplier): Supplier {
   return {
     id: s.id,
     name: s.name,
@@ -99,7 +103,7 @@ function mapSupplier(s: any): Supplier {
   };
 }
 
-function mapPO(po: any, suppliers: Supplier[]): PurchaseOrder {
+function mapPO(po: BackendPurchaseOrder, suppliers: Supplier[]): PurchaseOrder {
   const supplier = suppliers.find((s) => s.id === po.supplier_id);
   return {
     id: po.id,
@@ -110,16 +114,18 @@ function mapPO(po: any, suppliers: Supplier[]): PurchaseOrder {
     expectedAt: po.sent_at ?? po.created_at,
     total: po.total_amount,
     itemCount: po.items?.length ?? 0,
-    items: (po.items ?? []).map((i: any): POItem => ({
-      productId: i.product_id ?? "",
-      productName: i.product_name,
-      qty: i.quantity,
-      unitPrice: i.unit_price,
-    })),
+    items: (po.items ?? []).map(
+      (i: BackendPOItem): POItem => ({
+        productId: i.product_id ?? "",
+        productName: i.product_name,
+        qty: i.quantity,
+        unitPrice: i.unit_price,
+      }),
+    ),
   };
 }
 
-function mapAutomationLog(l: any): AutomationLog {
+function mapAutomationLog(l: BackendAutomationLog): AutomationLog {
   return {
     id: l.id,
     jobName: l.job_name,
@@ -183,7 +189,7 @@ export const productsApi = {
   },
 
   update: async (id: string, input: Partial<Product>): Promise<Product> => {
-    const payload: any = {};
+    const payload: Record<string, unknown> = {};
     if (input.name !== undefined) payload.name = input.name;
     if (input.category !== undefined) payload.category = input.category;
     if (input.price !== undefined) payload.price = input.price;
@@ -227,7 +233,7 @@ export const productsApi = {
 
   history: async (id: string): Promise<StockHistoryPoint[]> => {
     const { data } = await apiClient.get(`/products/${id}/inventory-logs`);
-    return (data as any[]).slice(0, 30).map((log: any) => ({
+    return (data as BackendInventoryLog[]).slice(0, 30).map((log: BackendInventoryLog) => ({
       date: log.created_at.split("T")[0],
       stock: log.quantity_after,
       label: log.change_type,
@@ -241,7 +247,7 @@ export const productsApi = {
 export const suppliersApi = {
   list: async (): Promise<Supplier[]> => {
     const { data } = await apiClient.get("/suppliers/");
-    _cachedSuppliers = (data as any[]).map(mapSupplier);
+    _cachedSuppliers = (data as BackendSupplier[]).map(mapSupplier);
     return _cachedSuppliers;
   },
 
@@ -254,7 +260,9 @@ export const suppliersApi = {
     }
   },
 
-  create: async (input: Omit<Supplier, "id" | "rating" | "totalOrders" | "status">): Promise<Supplier> => {
+  create: async (
+    input: Omit<Supplier, "id" | "rating" | "totalOrders" | "status">,
+  ): Promise<Supplier> => {
     const payload = {
       name: input.name,
       email: input.email,
@@ -267,12 +275,14 @@ export const suppliersApi = {
   },
 
   update: async (id: string, input: Partial<Supplier>): Promise<Supplier> => {
-    const payload: any = {};
+    const payload: Record<string, unknown> = {};
     if (input.name !== undefined) payload.name = input.name;
     if (input.email !== undefined) payload.email = input.email;
     if (input.phone !== undefined) payload.phone = input.phone;
     if (input.categories !== undefined)
-      payload.categories = Array.isArray(input.categories) ? input.categories.join(", ") : input.categories;
+      payload.categories = Array.isArray(input.categories)
+        ? input.categories.join(", ")
+        : input.categories;
     if (input.leadTimeDays !== undefined) payload.lead_time_days = input.leadTimeDays;
     if (input.status !== undefined) payload.is_active = input.status === "active";
     const { data } = await apiClient.patch(`/suppliers/${id}`, payload);
@@ -292,7 +302,7 @@ export const purchaseOrdersApi = {
   list: async (): Promise<PurchaseOrder[]> => {
     if (_cachedSuppliers.length === 0) await suppliersApi.list();
     const { data } = await apiClient.get("/purchase-orders/");
-    return (data as any[]).map((po) => mapPO(po, _cachedSuppliers));
+    return (data as BackendPurchaseOrder[]).map((po) => mapPO(po, _cachedSuppliers));
   },
 
   create: async (input: {
@@ -328,7 +338,7 @@ export const purchaseOrdersApi = {
 export const automationApi = {
   logs: async (): Promise<AutomationLog[]> => {
     const { data } = await apiClient.get("/reports/automation-logs");
-    return (data as any[]).map(mapAutomationLog);
+    return (data as BackendAutomationLog[]).map(mapAutomationLog);
   },
 };
 
@@ -349,7 +359,7 @@ export const invoicesApi = {
       invoiceNumber: data.invoice_number ?? `INV-${Date.now()}`,
       invoiceDate: data.invoice_date ?? new Date().toISOString().split("T")[0],
       total: data.grand_total ?? 0,
-      items: (data.line_items ?? []).map((i: any) => ({
+      items: (data.line_items ?? []).map((i: BackendInvoiceLineItem) => ({
         product: i.name,
         qty: i.qty,
         price: i.unit_price,
@@ -373,7 +383,7 @@ export const aiApi = {
       id: "seed_1",
       role: "assistant",
       content:
-        "Hi! I'm your SmartStore AI assistant. I have live access to your inventory database. Try asking:\n\n- _\"Which products are low on stock?\"_\n- _\"Are any items expiring soon?\"_\n- _\"Create a draft purchase order for low stock items\"_",
+        'Hi! I\'m your SmartStore AI assistant. I have live access to your inventory database. Try asking:\n\n- _"Which products are low on stock?"_\n- _"Are any items expiring soon?"_\n- _"Create a draft purchase order for low stock items"_',
       createdAt: new Date().toISOString(),
     },
   ],

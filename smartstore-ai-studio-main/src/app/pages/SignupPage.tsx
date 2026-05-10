@@ -27,7 +27,7 @@
 //       await authApi.register(email, password, fullName, role);
 //       toast.success("Account created", { description: "You can now sign in with your new account" });
 //       navigate("/login", { state: { email } });
-//     } catch (error: any) {
+//     } catch (error: unknown) {
 //       const detail = error?.response?.data?.detail;
 //       toast.error("Sign up failed", {
 //         description: typeof detail === "string" ? detail : "Please verify your details and try again",
@@ -222,31 +222,50 @@ export function SignupPage() {
       });
 
       navigate("/login", { state: { email } });
-
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ FULL REGISTER ERROR:", error);
 
       let message = "Something went wrong";
 
-      if (error?.response?.data) {
-        const data = error.response.data;
+      if (
+        error &&
+        typeof error === "object" &&
+        "response" in error &&
+        error.response &&
+        typeof error.response === "object" &&
+        "data" in error.response
+      ) {
+        const data = (error.response as { data: unknown }).data;
 
         // FastAPI typical formats
-        if (typeof data.detail === "string") {
-          message = data.detail;
-        } else if (Array.isArray(data.detail)) {
-          message = data.detail.map((d: any) => d.msg).join(", ");
+        if (data && typeof data === "object" && "detail" in data) {
+          const detail = (data as { detail: unknown }).detail;
+          if (typeof detail === "string") {
+            message = detail;
+          } else if (Array.isArray(detail)) {
+            message = detail
+              .map((d: unknown) =>
+                d && typeof d === "object" && "msg" in d ? (d as { msg: string }).msg : String(d),
+              )
+              .join(", ");
+          } else {
+            message = JSON.stringify(data);
+          }
         } else {
           message = JSON.stringify(data);
         }
-      } else if (error?.message) {
+      } else if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
         message = error.message;
       }
 
       toast.error("Sign up failed", {
         description: message,
       });
-
     } finally {
       setLoading(false);
     }
@@ -274,14 +293,10 @@ export function SignupPage() {
             <h1 className="text-4xl font-bold">
               One signup, <span className="text-gradient-gold">all roles</span>
             </h1>
-            <p className="text-muted-foreground mt-4">
-              Create admin or staff accounts securely.
-            </p>
+            <p className="text-muted-foreground mt-4">Create admin or staff accounts securely.</p>
           </motion.div>
 
-          <div className="text-xs text-muted-foreground/60">
-            © 2026 SmartStore AI
-          </div>
+          <div className="text-xs text-muted-foreground/60">© 2026 SmartStore AI</div>
         </div>
       </div>
 
@@ -290,7 +305,6 @@ export function SignupPage() {
           <h2 className="text-2xl font-bold">Create account</h2>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-
             <Field label="Full name" icon={<UserRound size={16} />}>
               <input
                 type="text"
@@ -348,7 +362,15 @@ export function SignupPage() {
   );
 }
 
-function Field({ label, icon, children }: any) {
+function Field({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
       <div className="text-xs mb-1">{label}</div>

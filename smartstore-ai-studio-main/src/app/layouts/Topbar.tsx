@@ -46,7 +46,10 @@ export function Topbar() {
             <Bell className="size-4 text-muted-foreground" />
             <span className="absolute top-2 right-2 size-1.5 rounded-full bg-destructive" />
           </button>
-          <Button onClick={toggleChat} className="bg-gradient-gold text-primary-foreground hover:opacity-90 shadow-glow">
+          <Button
+            onClick={toggleChat}
+            className="bg-gradient-gold text-primary-foreground hover:opacity-90 shadow-glow"
+          >
             <Sparkles className="size-4 mr-1.5" />
             Ask AI
           </Button>

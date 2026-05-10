@@ -30,10 +30,17 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "SmartStore AI — Intelligent Inventory & Vendor Management" },
-      { name: "description", content: "AI-powered inventory, forecasting, and vendor management for modern retail and B2B operations." },
+      {
+        name: "description",
+        content:
+          "AI-powered inventory, forecasting, and vendor management for modern retail and B2B operations.",
+      },
       { name: "author", content: "SmartStore AI" },
       { property: "og:title", content: "SmartStore AI" },
-      { property: "og:description", content: "AI-powered inventory, forecasting, and vendor management." },
+      {
+        property: "og:description",
+        content: "AI-powered inventory, forecasting, and vendor management.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -42,7 +49,10 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

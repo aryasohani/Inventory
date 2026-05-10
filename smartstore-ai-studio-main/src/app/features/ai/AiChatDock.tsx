@@ -83,7 +83,9 @@ export function AiChatDock() {
                   SmartStore AI
                   <span className="size-1.5 rounded-full bg-success" />
                 </div>
-                <div className="text-[11px] text-muted-foreground">Powered by demand-aware reasoning</div>
+                <div className="text-[11px] text-muted-foreground">
+                  Powered by demand-aware reasoning
+                </div>
               </div>
               <button
                 onClick={() => setChatOpen(false)}
@@ -95,7 +97,10 @@ export function AiChatDock() {
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3 scrollbar-thin">
+            <div
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto px-4 py-4 space-y-3 scrollbar-thin"
+            >
               {messages.map((m) => (
                 <ChatBubble key={m.id} msg={m} />
               ))}
@@ -166,7 +171,7 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
           "max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
           isUser
             ? "bg-gradient-gold text-primary-foreground rounded-br-md"
-            : "bg-muted/50 text-foreground rounded-bl-md border border-border"
+            : "bg-muted/50 text-foreground rounded-bl-md border border-border",
         )}
       >
         <div className="whitespace-pre-wrap">{renderMarkdown(msg.content)}</div>
@@ -203,9 +208,10 @@ function renderMarkdown(text: string) {
     const formatted = line
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
-      .replace(/`(.+?)`/g, '<code class="text-primary bg-black/30 px-1 py-0.5 rounded text-[11px]">$1</code>');
-    return (
-      <div key={i} dangerouslySetInnerHTML={{ __html: formatted || "&nbsp;" }} />
-    );
+      .replace(
+        /`(.+?)`/g,
+        '<code class="text-primary bg-black/30 px-1 py-0.5 rounded text-[11px]">$1</code>',
+      );
+    return <div key={i} dangerouslySetInnerHTML={{ __html: formatted || "&nbsp;" }} />;
   });
 }

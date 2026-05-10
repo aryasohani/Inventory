@@ -8,6 +8,20 @@ export type User = {
   avatar?: string;
 };
 
+export type BackendProduct = {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  reorder_threshold: number;
+  expiry_date?: string;
+  supplier_id?: string;
+  stock_status: "ok" | "low" | "critical";
+  description?: string;
+};
+
 export type Product = {
   id: string;
   sku: string;
@@ -25,6 +39,17 @@ export type Product = {
   description?: string;
 };
 
+export type BackendSupplier = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  categories_list?: string[];
+  categories?: string;
+  lead_time_days: number;
+  is_active: boolean;
+};
+
 export type Supplier = {
   id: string;
   name: string;
@@ -39,12 +64,29 @@ export type Supplier = {
 
 export type POStatus = "draft" | "sent" | "acknowledged" | "received";
 
+export type BackendPOItem = {
+  product_id?: string;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+};
+
 export type POItem = {
   productId: string;
   productName: string;
   sku?: string;
   qty: number;
   unitPrice: number;
+};
+
+export type BackendPurchaseOrder = {
+  id: string;
+  supplier_id: string;
+  status: POStatus;
+  created_at: string;
+  sent_at?: string;
+  total_amount: number;
+  items?: BackendPOItem[];
 };
 
 export type PurchaseOrder = {
@@ -59,13 +101,12 @@ export type PurchaseOrder = {
   items: POItem[];
 };
 
-export type AutomationLog = {
+export type BackendAutomationLog = {
   id: string;
-  jobName: string;
-  schedule: string;
-  lastRunAt: string;
-  status: "success" | "warning" | "error";
-  output: string;
+  job_name: string;
+  started_at: string;
+  status: string;
+  message?: string;
 };
 
 export type ChatMessage = {
@@ -76,13 +117,11 @@ export type ChatMessage = {
   toolCall?: { name: string; result: string };
 };
 
-export type Invoice = {
-  id: string;
-  supplierName: string;
-  invoiceNumber: string;
-  invoiceDate: string;
+export type BackendInvoiceLineItem = {
+  name: string;
+  qty: number;
+  unit_price: number;
   total: number;
-  items: { product: string; qty: number; price: number; total: number }[];
 };
 
 export type ForecastPoint = {
@@ -94,8 +133,8 @@ export type ForecastPoint = {
   confidence: number;
 };
 
-export type StockHistoryPoint = {
-  date: string;
-  stock: number;
-  label: string;
+export type BackendInventoryLog = {
+  created_at: string;
+  quantity_after: number;
+  change_type: string;
 };
