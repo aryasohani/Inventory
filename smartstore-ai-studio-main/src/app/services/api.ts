@@ -23,7 +23,7 @@ import type {
 // ── Base URL ──────────────────────────────────────────────────────────────────
 // In development backend runs on 8000 by default in this project.
 // In production set VITE_API_URL=https://your-backend.com
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8001";
+const BASE_URL = import.meta.env.VITE_API_URL ?? "https://inventory-backend07.onrender.com";
 
 // ── Axios instance ────────────────────────────────────────────────────────────
 export const apiClient = axios.create({
