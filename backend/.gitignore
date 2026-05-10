@@ -1,0 +1,40 @@
+# Environment variables - SENSITIVE
+.env
+.env.*
+!.env.example
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.pyc
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Database
+*.db
+*.sqlite3
+
+# Alembic
+alembic/versions/*.pyc
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db".env.example" 
+.env 
+.env.example 
+*.db 
+env.py 
+__pycache__/ 
+*.pyc 
+env.py 
