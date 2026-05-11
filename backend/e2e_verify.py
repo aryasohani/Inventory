@@ -4,7 +4,7 @@ from pathlib import Path
 import httpx
 from PIL import Image
 
-BASE = "http://127.0.0.1:8001"
+BASE = "https://inventory-n7kn.vercel.app"
 
 
 def ensure(cond: bool, message: str):
