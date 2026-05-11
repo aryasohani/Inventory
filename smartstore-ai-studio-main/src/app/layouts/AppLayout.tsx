@@ -9,9 +9,9 @@ export function AppLayout() {
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
         <Topbar />
-        <main className="flex-1 px-6 lg:px-8 py-6 max-w-[1600px] w-full mx-auto">
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 max-w-[1600px] w-full mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

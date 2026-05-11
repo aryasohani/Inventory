@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useState, useEffect } from "react";
 import { LoginPage } from "@/app/pages/LoginPage";
 import { SignupPage } from "@/app/pages/SignupPage";
 import { ProtectedRoute } from "@/app/auth/ProtectedRoute";
@@ -25,6 +26,16 @@ const queryClient = new QueryClient({
   },
 });
 
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
+  return isClient ? <>{children}</> : (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  );
+}
+
 export function AppRoot() {
   // const initialEntry =
   //   typeof window === "undefined"
@@ -35,31 +46,33 @@ export function AppRoot() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider delayDuration={150}>
         <div className="dark">
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route element={<ProtectedRoute />}>
-                <Route element={<AppLayout />}>
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                  <Route path="/dashboard" element={<DashboardPage />} />
-                  <Route path="/products" element={<ProductsPage />} />
-                  <Route path="/products/new" element={<ProductFormPage />} />
-                  <Route path="/products/:id" element={<ProductDetailPage />} />
-                  <Route path="/products/:id/edit" element={<ProductFormPage />} />
-                  <Route path="/suppliers" element={<SuppliersPage />} />
-                  <Route path="/suppliers/new" element={<SupplierFormPage />} />
-                  <Route path="/suppliers/:id/edit" element={<SupplierFormPage />} />
-                  <Route path="/purchase-orders" element={<PurchaseOrdersPage />} />
-                  <Route path="/purchase-orders/new" element={<PurchaseOrderFormPage />} />
-                  <Route path="/invoices" element={<InvoiceOcrPage />} />
-                  <Route path="/automation" element={<AutomationPage />} />
-                  <Route path="/reports" element={<ReportsPage />} />
+          <ClientOnly>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<AppLayout />}>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/products" element={<ProductsPage />} />
+                    <Route path="/products/new" element={<ProductFormPage />} />
+                    <Route path="/products/:id" element={<ProductDetailPage />} />
+                    <Route path="/products/:id/edit" element={<ProductFormPage />} />
+                    <Route path="/suppliers" element={<SuppliersPage />} />
+                    <Route path="/suppliers/new" element={<SupplierFormPage />} />
+                    <Route path="/suppliers/:id/edit" element={<SupplierFormPage />} />
+                    <Route path="/purchase-orders" element={<PurchaseOrdersPage />} />
+                    <Route path="/purchase-orders/new" element={<PurchaseOrderFormPage />} />
+                    <Route path="/invoices" element={<InvoiceOcrPage />} />
+                    <Route path="/automation" element={<AutomationPage />} />
+                    <Route path="/reports" element={<ReportsPage />} />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </BrowserRouter>
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </BrowserRouter>
+          </ClientOnly>
           <Toaster
             position="top-right"
             toastOptions={{

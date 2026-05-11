@@ -38,7 +38,7 @@ const nav: {
 
 export function Sidebar() {
   const { user, logout } = useAuthStore();
-  const { sidebarCollapsed, toggleSidebar } = useUiStore();
+  const { sidebarCollapsed, toggleSidebar, mobileSidebarOpen, setMobileSidebarOpen } = useUiStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -49,11 +49,29 @@ export function Sidebar() {
   const role = user?.role ?? "staff";
 
   return (
-    <motion.aside
-      animate={{ width: sidebarCollapsed ? 72 : 248 }}
-      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-      className="sticky top-0 h-screen shrink-0 border-r border-sidebar-border bg-sidebar flex flex-col z-30"
-    >
+    <>
+      {/* Mobile overlay */}
+      {mobileSidebarOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+      <motion.aside
+        animate={{
+          width: sidebarCollapsed ? 72 : 248,
+          x: mobileSidebarOpen ? 0 : -248,
+        }}
+        transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+        className={cn(
+          "h-screen shrink-0 border-r border-sidebar-border bg-sidebar flex flex-col",
+          "hidden lg:flex",
+          mobileSidebarOpen && "fixed z-50 lg:hidden"
+        )}
+      >
       <div className="h-16 flex items-center gap-2.5 px-4 border-b border-sidebar-border">
         <div className="size-9 rounded-xl bg-gradient-gold grid place-items-center shadow-glow shrink-0">
           <Sparkles className="size-4 text-primary-foreground" strokeWidth={2.5} />
@@ -149,5 +167,6 @@ export function Sidebar() {
         </button>
       </div>
     </motion.aside>
+    </>
   );
 }

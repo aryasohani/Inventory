@@ -1,4 +1,4 @@
-import { Search, Bell, Sparkles } from "lucide-react";
+import { Search, Bell, Sparkles, Menu } from "lucide-react";
 import { useUiStore } from "@/app/store/uiStore";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "react-router-dom";
@@ -14,14 +14,22 @@ const titles: Record<string, string> = {
 };
 
 export function Topbar() {
-  const { toggleChat } = useUiStore();
+  const { toggleChat, toggleMobileSidebar } = useUiStore();
   const { pathname } = useLocation();
   const base = "/" + pathname.split("/")[1];
   const title = titles[base] ?? "SmartStore AI";
 
   return (
     <header className="sticky top-0 z-20 h-16 border-b border-border glass">
-      <div className="h-full px-6 lg:px-8 flex items-center gap-4">
+      <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="lg:hidden"
+          onClick={toggleMobileSidebar}
+        >
+          <Menu className="size-4" />
+        </Button>
         <div className="flex flex-col">
           <h1 className="text-lg font-display font-semibold tracking-tight">{title}</h1>
           <p className="text-xs text-muted-foreground">Real-time inventory intelligence</p>

@@ -6,6 +6,9 @@ type UiState = {
   toggleChat: () => void;
   sidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  mobileSidebarOpen: boolean;
+  setMobileSidebarOpen: (v: boolean) => void;
+  toggleMobileSidebar: () => void;
 };
 
 export const useUiStore = create<UiState>((set) => ({
@@ -14,4 +17,7 @@ export const useUiStore = create<UiState>((set) => ({
   toggleChat: () => set((s) => ({ chatOpen: !s.chatOpen })),
   sidebarCollapsed: false,
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+  mobileSidebarOpen: false,
+  setMobileSidebarOpen: (v) => set({ mobileSidebarOpen: v }),
+  toggleMobileSidebar: () => set((s) => ({ mobileSidebarOpen: !s.mobileSidebarOpen })),
 }));
