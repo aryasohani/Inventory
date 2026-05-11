@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,16 +26,16 @@ const queryClient = new QueryClient({
 });
 
 export function AppRoot() {
-  const initialEntry =
-    typeof window === "undefined"
-      ? "/"
-      : `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  // const initialEntry =
+  //   typeof window === "undefined"
+  //     ? "/"
+  //     : `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider delayDuration={150}>
         <div className="dark">
-          <MemoryRouter initialEntries={[initialEntry]}>
+          <BrowserRouter>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
@@ -59,7 +59,7 @@ export function AppRoot() {
               </Route>
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
-          </MemoryRouter>
+          </BrowserRouter>
           <Toaster
             position="top-right"
             toastOptions={{
