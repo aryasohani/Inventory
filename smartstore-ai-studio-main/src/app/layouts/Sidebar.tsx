@@ -22,19 +22,19 @@ const nav: {
   icon: typeof LayoutDashboard;
   roles: ReadonlyArray<"admin" | "staff">;
 }[] = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "staff"] },
-  { to: "/products", label: "Products", icon: Package, roles: ["admin", "staff"] },
-  { to: "/suppliers", label: "Suppliers", icon: Users, roles: ["admin"] },
-  {
-    to: "/purchase-orders",
-    label: "Purchase Orders",
-    icon: ShoppingCart,
-    roles: ["admin", "staff"],
-  },
-  { to: "/invoices", label: "Invoice OCR", icon: FileText, roles: ["admin"] },
-  { to: "/automation", label: "Automation", icon: Workflow, roles: ["admin"] },
-  { to: "/reports", label: "Reports", icon: BarChart3, roles: ["admin"] },
-];
+    { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "staff"] },
+    { to: "/products", label: "Products", icon: Package, roles: ["admin", "staff"] },
+    { to: "/suppliers", label: "Suppliers", icon: Users, roles: ["admin"] },
+    {
+      to: "/purchase-orders",
+      label: "Purchase Orders",
+      icon: ShoppingCart,
+      roles: ["admin", "staff"],
+    },
+    { to: "/invoices", label: "Invoice OCR", icon: FileText, roles: ["admin"] },
+    { to: "/automation", label: "Automation", icon: Workflow, roles: ["admin"] },
+    { to: "/reports", label: "Reports", icon: BarChart3, roles: ["admin"] },
+  ];
 
 export function Sidebar() {
   const { user, logout } = useAuthStore();
@@ -68,8 +68,8 @@ export function Sidebar() {
         }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 h-full border-r border-sidebar-border bg-sidebar flex flex-col transition-all duration-300",
-          "lg:relative lg:translate-x-0 lg:z-0",
+          "fixed inset-y-0 left-0 z-50 h-screen border-r border-sidebar-border bg-sidebar flex flex-col transition-all duration-300",
+          "lg:sticky lg:top-0 lg:translate-x-0 lg:z-0",
           !mobileSidebarOpen && "hidden lg:flex"
         )}
       >
@@ -79,10 +79,7 @@ export function Sidebar() {
           </div>
           {!sidebarCollapsed && (
             <div className="flex flex-col leading-tight overflow-hidden">
-              <span className="font-display font-bold text-base tracking-tight">SmartStore</span>
-              <span className="text-[10px] uppercase tracking-[0.25em] text-primary font-bold">
-                AI STUDIO
-              </span>
+              <span className="font-display font-bold text-base tracking-tight">SmartStore AI</span>
             </div>
           )}
         </div>
@@ -153,7 +150,7 @@ export function Sidebar() {
               </div>
             </div>
           )}
-          
+
           <div className="grid grid-cols-1 gap-1">
             <button
               onClick={handleLogout}

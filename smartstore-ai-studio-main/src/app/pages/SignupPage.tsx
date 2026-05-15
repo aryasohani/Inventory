@@ -54,17 +54,14 @@ export function SignupPage() {
       <div className="hidden lg:flex flex-1 relative overflow-hidden border-r border-white/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(234,179,8,0.15),transparent_70%)]" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50" />
-        
+
         <div className="relative z-10 flex flex-col justify-between p-16 w-full">
           <div className="flex items-center gap-4">
             <div className="size-12 rounded-2xl bg-gradient-gold grid place-items-center shadow-glow">
               <Sparkles className="size-6 text-primary-foreground" strokeWidth={2.5} />
             </div>
             <div className="leading-none">
-              <div className="font-display font-bold text-2xl tracking-tight text-white">SmartStore</div>
-              <div className="text-[11px] uppercase tracking-[0.3em] text-primary font-bold mt-1">
-                AI STUDIO
-              </div>
+              <div className="font-display font-bold text-2xl tracking-tight text-white">SmartStore AI</div>
             </div>
           </div>
 
@@ -92,7 +89,7 @@ export function SignupPage() {
       {/* Right form */}
       <div className="flex-1 flex items-center justify-center p-8 lg:p-16 relative">
         <div className="lg:hidden absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,_rgba(234,179,8,0.1),transparent_50%)]" />
-        
+
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -133,7 +130,7 @@ export function SignupPage() {
                 placeholder="operator@smartstore.ai"
               />
             </Field>
-            
+
             <Field icon={<Lock className="size-5" />} label="Security Key">
               <input
                 type="password"

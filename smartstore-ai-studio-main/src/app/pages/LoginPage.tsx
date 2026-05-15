@@ -51,10 +51,7 @@ export function LoginPage() {
               <Sparkles className="size-6 text-primary-foreground" strokeWidth={2.5} />
             </div>
             <div className="leading-none">
-              <div className="font-display font-bold text-2xl tracking-tight text-white">SmartStore</div>
-              <div className="text-[11px] uppercase tracking-[0.3em] text-primary font-bold mt-1">
-                AI STUDIO
-              </div>
+              <div className="font-display font-bold text-2xl tracking-tight text-white">SmartStore AI</div>
             </div>
           </div>
 

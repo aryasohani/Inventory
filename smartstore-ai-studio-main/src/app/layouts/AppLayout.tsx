@@ -7,11 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 export function AppLayout() {
   const location = useLocation();
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex h-screen w-full overflow-hidden bg-[#050505]">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Topbar />
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 max-w-[1600px] w-full mx-auto">
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 w-full max-w-[1600px] mx-auto scrollbar-thin">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
