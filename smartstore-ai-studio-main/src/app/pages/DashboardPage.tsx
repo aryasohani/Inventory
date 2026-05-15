@@ -98,90 +98,106 @@ export function DashboardPage() {
 
       {/* AI insights banner */}
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl border border-primary/20 p-5 bg-gradient-to-br from-primary/8 via-primary/4 to-transparent"
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        className="relative overflow-hidden rounded-3xl border border-primary/30 p-8 glass"
       >
-        <div className="absolute -right-16 -top-16 size-56 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-        <div className="relative flex flex-col md:flex-row md:items-center gap-4">
-          <div className="size-11 rounded-xl bg-gradient-gold grid place-items-center shadow-glow shrink-0">
-            <Sparkles className="size-5 text-primary-foreground" strokeWidth={2.5} />
+        <div className="absolute -right-24 -top-24 size-80 rounded-full bg-primary/20 blur-[100px] pointer-events-none" />
+        <div className="absolute -left-24 -bottom-24 size-80 rounded-full bg-primary/10 blur-[80px] pointer-events-none" />
+        
+        <div className="relative flex flex-col md:flex-row md:items-center gap-8">
+          <div className="size-16 rounded-2xl bg-gradient-gold grid place-items-center shadow-[0_0_40px_rgba(234,179,8,0.4)] shrink-0">
+            <Sparkles className="size-8 text-primary-foreground" strokeWidth={2.5} />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] uppercase tracking-[0.18em] text-primary font-bold">
-              AI Insight
+            <div className="flex items-center gap-2 mb-2">
+              <div className="text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
+                Predictive Intelligence
+              </div>
+              <div className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] text-primary font-bold">
+                Live
+              </div>
             </div>
-            <p className="text-sm mt-1 text-foreground">
-              <strong>{lowStock.length} SKUs</strong> are projected to stock out within{" "}
-              <strong>5 days</strong> based on current velocity. Consider drafting POs to{" "}
-              <strong>Aurora Wholesale</strong> and <strong>MediCore</strong> — combined estimated
-              cost <strong className="text-primary">$3,210</strong>.
+            <p className="text-lg text-white/90 leading-relaxed font-medium">
+              <strong className="text-primary">{lowStock.length} SKUs</strong> are projected to stock out within{" "}
+              <strong className="text-primary font-bold">5 days</strong>. Automated procurement suggests drafting POs to{" "}
+              <span className="underline decoration-primary/40 underline-offset-4 decoration-2">Aurora Wholesale</span> and 1 other supplier.
             </p>
           </div>
           <Button
-            size="sm"
-            variant="outline"
-            className="border-primary/30 text-primary hover:bg-primary/10"
+            size="lg"
+            className="bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-glow h-14 px-8 rounded-xl font-bold"
             onClick={() => setChatOpen(true)}
           >
-            Generate POs
-            <ArrowUpRight className="size-3.5 ml-1" />
+            Review Procurement
+            <ArrowUpRight className="size-5 ml-2" />
           </Button>
         </div>
       </motion.div>
 
       {/* Two columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Low stock */}
         <Panel
-          title="Low Stock — AI Priority"
-          subtitle="Sorted by stockout risk"
+          title="Stock Alerts"
+          subtitle="Priority focus based on lead times"
           actions={
             <Link
               to="/products"
-              className="text-xs text-primary hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10"
             >
-              View all <ArrowUpRight className="size-3" />
+              Intelligence View <ArrowUpRight className="size-3.5" />
             </Link>
           }
         >
           {products.isLoading ? (
             <ListSkeleton />
           ) : (
-            <div className="divide-y divide-border">
-              {lowStock.slice(0, 5).map((p) => {
+            <div className="space-y-1 mt-4">
+              {lowStock.slice(0, 5).map((p, i) => {
                 const days = Math.max(0, Math.ceil(p.stock / Math.max(1, p.velocity)));
                 return (
-                  <Link
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
                     key={p.id}
-                    to={`/products/${p.id}`}
-                    className="flex items-center gap-3 py-3 hover:bg-accent/30 -mx-3 px-3 rounded-lg transition-colors group"
                   >
-                    <div className="size-9 rounded-lg bg-gradient-to-br from-primary/15 to-transparent grid place-items-center shrink-0">
-                      <Package className="size-4 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{p.name}</div>
-                      <div className="text-[11px] text-muted-foreground">
-                        {p.sku} · {p.category}
+                    <Link
+                      to={`/products/${p.id}`}
+                      className="flex items-center gap-4 py-4 px-4 hover:bg-white/[0.03] border border-transparent hover:border-white/5 rounded-2xl transition-all group"
+                    >
+                      <div className="size-11 rounded-xl bg-white/5 border border-white/5 grid place-items-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Package className="size-5 text-primary/80" />
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold tabular-nums">
-                        {p.stock}{" "}
-                        <span className="text-muted-foreground font-normal">
-                          / {p.reorderLevel}
-                        </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm truncate group-hover:text-primary transition-colors">{p.name}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">
+                          {p.sku} · {p.category}
+                        </div>
                       </div>
-                      <div className="text-[10px] text-muted-foreground">{days}d cover</div>
-                    </div>
-                    <StatusPill status={p.status} />
-                  </Link>
+                      <div className="text-right flex flex-col items-end gap-1">
+                        <div className="text-sm font-bold tabular-nums">
+                          {p.stock}{" "}
+                          <span className="text-muted-foreground/50 font-normal">
+                            / {p.reorderLevel}
+                          </span>
+                        </div>
+                        <div className={cn(
+                          "text-[10px] font-bold px-2 py-0.5 rounded-full border",
+                          days <= 2 ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-white/5 text-white/50 border-white/10"
+                        )}>
+                          {days}d cover
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
                 );
               })}
               {lowStock.length === 0 && (
-                <div className="py-8 text-sm text-center text-muted-foreground">
-                  All stock levels healthy 🎉
+                <div className="py-12 text-sm text-center text-muted-foreground border border-dashed border-white/10 rounded-2xl">
+                  Inventory levels are optimal
                 </div>
               )}
             </div>
@@ -189,45 +205,57 @@ export function DashboardPage() {
         </Panel>
 
         {/* Expiry */}
-        <Panel title="Expiring Soon" subtitle="Action required to avoid waste">
+        <Panel title="Risk Management" subtitle="Expiring and shelf-life alerts">
           {products.isLoading ? (
             <ListSkeleton />
           ) : (
-            <div className="divide-y divide-border">
-              {expiring.slice(0, 5).map((p) => {
+            <div className="space-y-1 mt-4">
+              {expiring.slice(0, 5).map((p, i) => {
                 const days = Math.max(
                   0,
                   Math.ceil((+new Date(p.expiryDate) - Date.now()) / 86400000),
                 );
                 const urgent = days < 7;
                 return (
-                  <Link
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
                     key={p.id}
-                    to={`/products/${p.id}`}
-                    className="flex items-center gap-3 py-3 hover:bg-accent/30 -mx-3 px-3 rounded-lg transition-colors"
                   >
-                    <div
-                      className={`size-9 rounded-lg grid place-items-center shrink-0 ${urgent ? "bg-destructive/15 text-destructive" : "bg-warning/15 text-warning"}`}
+                    <Link
+                      to={`/products/${p.id}`}
+                      className="flex items-center gap-4 py-4 px-4 hover:bg-white/[0.03] border border-transparent hover:border-white/5 rounded-2xl transition-all group"
                     >
-                      <Clock className="size-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{p.name}</div>
-                      <div className="text-[11px] text-muted-foreground">
-                        Expires {format(new Date(p.expiryDate), "MMM d, yyyy")}
+                      <div
+                        className={cn(
+                          "size-11 rounded-xl border grid place-items-center shrink-0 transition-transform group-hover:scale-110",
+                          urgent ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                        )}
+                      >
+                        <Clock className="size-5" />
                       </div>
-                    </div>
-                    <div
-                      className={`tabular-nums font-mono text-sm font-semibold ${urgent ? "text-destructive" : "text-warning"}`}
-                    >
-                      {days}d
-                    </div>
-                  </Link>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm truncate group-hover:text-primary transition-colors">{p.name}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">
+                          Shelf-life: {format(new Date(p.expiryDate), "MMM d, yyyy")}
+                        </div>
+                      </div>
+                      <div
+                        className={cn(
+                          "tabular-nums text-sm font-bold px-3 py-1 rounded-lg border",
+                          urgent ? "text-rose-400 border-rose-500/30 bg-rose-500/10" : "text-amber-400 border-amber-500/30 bg-amber-500/10"
+                        )}
+                      >
+                        {days}d
+                      </div>
+                    </Link>
+                  </motion.div>
                 );
               })}
               {expiring.length === 0 && (
-                <div className="py-8 text-sm text-center text-muted-foreground">
-                  No upcoming expirations.
+                <div className="py-12 text-sm text-center text-muted-foreground border border-dashed border-white/10 rounded-2xl">
+                  No shelf-life risks detected
                 </div>
               )}
             </div>
@@ -235,34 +263,37 @@ export function DashboardPage() {
         </Panel>
 
         {/* Top fast movers */}
-        <Panel title="Top Fast Movers" subtitle="Highest demand velocity">
+        <Panel title="Market Velocity" subtitle="Highest demand SKUs">
           {products.isLoading ? (
             <ListSkeleton />
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-6 mt-6">
               {fastMovers.map((p, idx) => {
                 const max = fastMovers[0].velocity || 1;
                 const pct = (p.velocity / max) * 100;
                 return (
                   <Link key={p.id} to={`/products/${p.id}`} className="block group">
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="text-[10px] tabular-nums text-muted-foreground w-4">
-                        #{idx + 1}
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-[11px] font-bold text-primary/40 w-5">
+                        {String(idx + 1).padStart(2, '0')}
                       </span>
-                      <span className="text-sm font-medium flex-1 truncate group-hover:text-primary transition-colors">
+                      <span className="text-sm font-bold flex-1 truncate group-hover:text-primary transition-colors">
                         {p.name}
                       </span>
-                      <span className="text-xs tabular-nums font-semibold text-primary flex items-center gap-1">
-                        <TrendingUp className="size-3" /> {p.velocity}/d
+                      <span className="text-xs tabular-nums font-bold text-primary flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-primary/10">
+                        <TrendingUp className="size-3.5" /> {p.velocity} u/d
                       </span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-muted/50 overflow-hidden ml-7">
+                    <div className="h-1.5 rounded-full bg-white/5 overflow-hidden ml-8">
                       <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${pct}%` }}
-                        transition={{ duration: 0.6, delay: idx * 0.05 }}
-                        className="h-full bg-gradient-gold rounded-full"
-                      />
+                        whileInView={{ width: `${pct}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, ease: "circOut", delay: idx * 0.1 }}
+                        className="h-full bg-gradient-gold rounded-full relative"
+                      >
+                        <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                      </motion.div>
                     </div>
                   </Link>
                 );
@@ -273,39 +304,49 @@ export function DashboardPage() {
 
         {/* Recent POs */}
         <Panel
-          title="Recent Purchase Orders"
+          title="Procurement Activity"
+          subtitle="Recent supply chain events"
           actions={
             <Link
               to="/purchase-orders"
-              className="text-xs text-primary hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10"
             >
-              View all <ArrowUpRight className="size-3" />
+              Order Management <ArrowUpRight className="size-3.5" />
             </Link>
           }
         >
           {orders.isLoading ? (
             <ListSkeleton />
           ) : (
-            <div className="divide-y divide-border">
-              {recentOrders.map((po) => (
-                <div key={po.id} className="flex items-center gap-3 py-3">
-                  <div className="size-9 rounded-lg bg-info/10 text-info grid place-items-center shrink-0">
-                    <ShoppingCart className="size-4" />
+            <div className="space-y-1 mt-4">
+              {recentOrders.map((po, i) => (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  key={po.id}
+                  className="flex items-center gap-4 py-4 px-4 hover:bg-white/[0.03] border border-transparent hover:border-white/5 rounded-2xl transition-all group"
+                >
+                  <div className="size-11 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 grid place-items-center shrink-0">
+                    <ShoppingCart className="size-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm truncate">
-                      {po.id.toUpperCase()} · {po.supplierName}
+                    <div className="font-bold text-sm truncate group-hover:text-primary transition-colors">
+                      {po.supplierName}
                     </div>
-                    <div className="text-[11px] text-muted-foreground">
-                      {formatDistanceToNow(new Date(po.createdAt), { addSuffix: true })} ·{" "}
-                      {po.itemCount} items
+                    <div className="text-[11px] text-muted-foreground mt-0.5">
+                      {po.id.toUpperCase()} · {formatDistanceToNow(new Date(po.createdAt), { addSuffix: true })}
                     </div>
                   </div>
-                  <div className="text-sm tabular-nums font-semibold mr-2">
-                    ${po.total.toFixed(2)}
+                  <div className="text-right">
+                    <div className="text-sm tabular-nums font-bold">
+                      ${po.total.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">
+                      {po.itemCount} units
+                    </div>
                   </div>
-                  <StatusPill status={po.status} />
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
@@ -327,11 +368,11 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card shadow-card p-5">
-      <div className="flex items-end justify-between mb-4">
+    <div className="glass-card p-8 rounded-3xl group">
+      <div className="flex items-center justify-between mb-2">
         <div>
-          <h3 className="font-display font-semibold text-base">{title}</h3>
-          {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
+          <h3 className="font-display font-bold text-xl bg-gradient-to-br from-white to-white/70 bg-clip-text text-transparent">{title}</h3>
+          {subtitle && <p className="text-[13px] text-muted-foreground font-medium mt-1">{subtitle}</p>}
         </div>
         {actions}
       </div>

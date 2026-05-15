@@ -13,10 +13,10 @@ type Props = {
 };
 
 const accentMap: Record<NonNullable<Props["accent"]>, string> = {
-  primary: "from-primary/15 to-primary/5 text-primary",
-  danger: "from-destructive/15 to-destructive/5 text-destructive",
-  warning: "from-warning/15 to-warning/5 text-warning",
-  success: "from-success/15 to-success/5 text-success",
+  primary: "bg-primary/10 text-primary border-primary/20",
+  danger: "bg-destructive/10 text-destructive border-destructive/20",
+  warning: "bg-warning/10 text-warning border-warning/20",
+  success: "bg-success/10 text-success border-success/20",
 };
 
 export function StatCard({
@@ -31,44 +31,49 @@ export function StatCard({
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="group relative overflow-hidden rounded-2xl border border-border bg-card shadow-card p-5"
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="group relative bg-black/40 border border-white/10 p-6 rounded-2xl overflow-hidden backdrop-blur-xl"
     >
-      <div className="absolute inset-0 bg-gradient-to-br opacity-50 pointer-events-none" />
-      <div className="relative flex items-start justify-between gap-4">
-        <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+      <div className="relative flex items-start justify-between">
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-bold text-white/50 uppercase tracking-[0.15em]">
             {label}
-          </span>
-          <span className="text-3xl font-display font-bold tracking-tight">{value}</span>
+          </p>
+          <h3 className="text-3xl font-display font-bold tracking-tight text-white">
+            {value}
+          </h3>
           {(delta || hint) && (
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2 pt-1">
               {delta && (
                 <span
                   className={cn(
-                    "text-xs font-semibold px-2 py-0.5 rounded-md",
-                    trend === "up" && "text-success bg-success/10",
-                    trend === "down" && "text-destructive bg-destructive/10",
-                    trend === "neutral" && "text-muted-foreground bg-muted/40",
+                    "text-[10px] font-bold px-2 py-0.5 rounded-full border",
+                    trend === "up" && "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+                    trend === "down" && "text-rose-400 bg-rose-500/10 border-rose-500/20",
+                    trend === "neutral" && "text-white/40 bg-white/5 border-white/10",
                   )}
                 >
                   {delta}
                 </span>
               )}
-              {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
+              {hint && <span className="text-[10px] text-muted-foreground font-medium">{hint}</span>}
             </div>
           )}
         </div>
         <div
           className={cn(
-            "size-11 rounded-xl grid place-items-center bg-gradient-to-br shrink-0 ring-1 ring-inset ring-white/5",
+            "size-12 rounded-xl grid place-items-center border shadow-glow transition-transform duration-300 group-hover:scale-110",
             accentMap[accent],
           )}
         >
           {icon}
         </div>
       </div>
+      
+      {/* Subtle decorative glow */}
+      <div className="absolute -bottom-6 -right-6 size-24 bg-primary/5 blur-2xl rounded-full transition-opacity group-hover:opacity-100 opacity-50" />
     </motion.div>
   );
 }

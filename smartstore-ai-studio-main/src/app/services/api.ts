@@ -330,6 +330,17 @@ export const purchaseOrdersApi = {
     const { data } = await apiClient.patch(`/purchase-orders/${id}/status`, { status });
     return mapPO(data, _cachedSuppliers);
   },
+
+  get: async (id: string): Promise<PurchaseOrder> => {
+    if (_cachedSuppliers.length === 0) await suppliersApi.list();
+    const { data } = await apiClient.get(`/purchase-orders/${id}`);
+    return mapPO(data, _cachedSuppliers);
+  },
+
+  sendEmail: async (id: string): Promise<{ ok: boolean }> => {
+    const { data } = await apiClient.post(`/purchase-orders/${id}/send-email`);
+    return data;
+  },
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -368,9 +379,21 @@ export const invoicesApi = {
     };
   },
 
-  confirm: async (_invoice: Invoice): Promise<{ ok: boolean }> => {
-    // Backend doesn't have a confirm endpoint — return ok
-    return { ok: true };
+  confirm: async (invoice: Invoice): Promise<{ ok: boolean }> => {
+    const { data } = await apiClient.post("/invoices/confirm", {
+      supplier_name: invoice.supplierName,
+      invoice_number: invoice.invoiceNumber,
+      invoice_date: invoice.invoiceDate,
+      line_items: invoice.items.map(i => ({
+        name: i.name,
+        qty: i.qty,
+        unit_price: i.price,
+        total: i.total,
+      })),
+      grand_total: invoice.grandTotal,
+      parse_confidence: invoice.parseConfidence,
+    });
+    return data;
   },
 };
 

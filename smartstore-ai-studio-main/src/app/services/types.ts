@@ -138,3 +138,17 @@ export type BackendInventoryLog = {
   quantity_after: number;
   change_type: string;
 };
+
+export type Invoice = {
+  supplierName: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  items: {
+    name: string;
+    qty: number;
+    price: number;
+    total: number;
+  }[];
+  grandTotal: number;
+  parseConfidence: string;
+};
