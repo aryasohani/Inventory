@@ -11,9 +11,9 @@ export function LoginPage() {
   const { isAuthenticated, login } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation() as { state?: { from?: string; email?: string } };
-  
+
   const [email, setEmail] = useState(location.state?.email ?? "admin@smartstore.ai");
-  const [password, setPassword] = useState("StrongPass123");
+  const [password, setPassword] = useState("demo1234");
   const [loading, setLoading] = useState(false);
 
   if (isAuthenticated) return <Navigate to="/dashboard" replace />;
@@ -35,7 +35,7 @@ export function LoginPage() {
 
   const quick = (e: string) => {
     setEmail(e);
-    setPassword("StrongPass123");
+    setPassword("demo1234");
   };
 
   return (
@@ -44,7 +44,7 @@ export function LoginPage() {
       <div className="hidden lg:flex flex-1 relative overflow-hidden border-r border-white/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(234,179,8,0.15),transparent_70%)]" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50" />
-        
+
         <div className="relative z-10 flex flex-col justify-between p-16 w-full">
           <div className="flex items-center gap-4">
             <div className="size-12 rounded-2xl bg-gradient-gold grid place-items-center shadow-[0_0_30px_rgba(234,179,8,0.3)] transition-transform hover:scale-110">
@@ -78,11 +78,11 @@ export function LoginPage() {
                 { k: "12hr", v: "Mean reduction in stockout latency" },
                 { k: "8.5×", v: "Efficiency gain in procurement workflows" },
               ].map((s, i) => (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + (i * 0.1) }}
-                  key={s.k} 
+                  key={s.k}
                   className="flex items-center gap-6 group"
                 >
                   <div className="text-4xl font-display font-bold text-primary w-24 group-hover:scale-110 transition-transform duration-300">
@@ -106,7 +106,7 @@ export function LoginPage() {
       {/* Right form */}
       <div className="flex-1 flex items-center justify-center p-8 lg:p-16 relative">
         <div className="lg:hidden absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,_rgba(234,179,8,0.1),transparent_50%)]" />
-        
+
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -136,7 +136,7 @@ export function LoginPage() {
                 placeholder="operator@smartstore.ai"
               />
             </Field>
-            
+
             <Field icon={<Lock className="size-5" />} label="Security Key">
               <input
                 type="password"
