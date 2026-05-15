@@ -1,5 +1,5 @@
 # 🏪 Smart Inventory — AI-Powered Inventory & Vendor Management
-
+https://inventory-n7kn.vercel.app/
 A full-stack inventory management system with a **FastAPI backend** and **React frontend**, featuring real AI tool-calling, automated scheduling, OCR invoice parsing, and demand forecasting.
 
 ---
